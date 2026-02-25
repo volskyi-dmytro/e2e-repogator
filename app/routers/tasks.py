@@ -45,7 +45,7 @@ def create_task(task_in: TaskCreate, db: Session = Depends(get_db), current_user
 def get_task(task_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     task = db.query(Task).filter(Task.id == task_id, Task.user_id == current_user.id).first()
     if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
+        raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
     return task
 
 
@@ -53,7 +53,7 @@ def get_task(task_id: int, db: Session = Depends(get_db), current_user: User = D
 def update_task(task_id: int, task_in: TaskUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     task = db.query(Task).filter(Task.id == task_id, Task.user_id == current_user.id).first()
     if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
+        raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
     for field, value in task_in.dict(exclude_unset=True).items():
         setattr(task, field, value)
     db.commit()
@@ -65,6 +65,6 @@ def update_task(task_id: int, task_in: TaskUpdate, db: Session = Depends(get_db)
 def delete_task(task_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     task = db.query(Task).filter(Task.id == task_id, Task.user_id == current_user.id).first()
     if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
+        raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
     db.delete(task)
     db.commit()
