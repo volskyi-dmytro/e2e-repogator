@@ -68,3 +68,8 @@ def delete_task(task_id: int, db: Session = Depends(get_db), current_user: User 
         raise HTTPException(status_code=404, detail="Task not found")
     db.delete(task)
     db.commit()
+
+
+@router.get("/count")
+def count_tasks(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    return {"count": db.query(Task).filter(Task.user_id == current_user.id).count()}
