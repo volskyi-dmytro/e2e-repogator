@@ -20,6 +20,7 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
 
     # WARNING: storing password in plain text — no hashing
     # TODO: use bcrypt: hashed = bcrypt.hashpw(user_in.password.encode(), bcrypt.gensalt())
+    # TODO: hash this password
     user = User(
         username=user_in.username,
         email=user_in.email,
